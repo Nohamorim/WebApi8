@@ -32,7 +32,7 @@ namespace WebApi8.Services.Autor
                 var autores = await _context.Autores.ToListAsync();
 
                 response.Dados = autores;
-                response.Mensagem = "Todos os autores listados com sucesso.";
+                response.Mensagem = "Todos os autores foram coletados.";
                 return response;
 
             }
