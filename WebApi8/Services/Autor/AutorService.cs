@@ -14,9 +14,29 @@ namespace WebApi8.Services.Autor
         {
             _context = context;
         }
-        public Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idAutor)
+        public async Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idAutor)
         {
-            throw new NotImplementedException();
+            ResponseModel<AutorModel> response = new ResponseModel<List<AutorModel>();
+            try
+            {
+                var autor = await _context.Autores.FirstOrDefaultAsync(autorBanco => autorBanco.Id == idAutor);
+
+                if(autor == null)
+                {
+                    response.Mensagem = "Autor não encontrado.";
+                    return response;
+                }
+
+                response.Dados = autor;
+                response.Mensagem = "Autor encontrado com sucesso.";
+                return response;
+
+            } catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
         }
 
         public Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int idLivro)
