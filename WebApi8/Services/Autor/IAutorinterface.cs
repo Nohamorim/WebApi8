@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WebApi8.Models;
+using WebApi8.Dto.Autor;
 
 namespace WebApi8.Services.Autor
 {
@@ -11,6 +8,6 @@ namespace WebApi8.Services.Autor
         Task<ResponseModel<List<AutorModel>>> ListarAutores();
         Task<ResponseModel<AutorModel>> BuscarAutorPorId(int idAutor);
         Task<ResponseModel<AutorModel>> BuscarAutorPorIdLivro(int idLivro);
-        Task<ResponseModel<List<AutorModel>>> CriarAutor(AutorCriacaoDto autorCriacaoDto);
+        Task<ResponseModel<AutorModel>> CriarAutor(AutorCriacaoDto autorCriacaoDto);
     }
 }

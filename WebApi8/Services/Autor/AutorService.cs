@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApi8.Models;
+using WebApi8.Dto.Autor;
 
 namespace WebApi8.Services.Autor
 {
@@ -67,6 +64,31 @@ namespace WebApi8.Services.Autor
             }
         }
 
+        public async Task<ResponseModel<List<AutorModel>>> CriarAutor(AutorCriacaoDto autorCriacaoDto)
+        {
+            var response = new ResponseModel<List<AutorModel>>();
+
+            try
+            {
+                var autor = new AutorModel
+                {
+                    Nome = autorCriacaoDto.Nome,
+                    Sobrenome = autorCriacaoDto.Sobrenome
+                };
+                _context.Add(autor);
+                await _context.SaveChangesAsync();
+
+                response.Dados = await _context.Autores.ToListAsync();
+                response.Mensagem = "Autor criado com sucesso!";
+            }catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+            }
+
+            return response;
+        }
+
         public async Task<ResponseModel<List<AutorModel>>> ListarAutores()
         {
             ResponseModel<List<AutorModel>> response = new ResponseModel<List<AutorModel>>();
@@ -85,6 +107,11 @@ namespace WebApi8.Services.Autor
                 response.Status = false;
                 return response;
             }
+        }
+
+        Task<ResponseModel<AutorModel>> IAutorInterface.CriarAutor(AutorCriacaoDto autorCriacaoDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
