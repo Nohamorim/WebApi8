@@ -34,8 +34,18 @@ namespace WebApi8.Controllers
 
         public async Task<ActionResult<ResponseModel<AutorModel>>> BuscarAutorPorIdLivro(int idLivro)
         {
-            var autor = await _autorInterface.BuscarAutorPorIdLivro(idLivro);
-            return Ok(autor);
+            ResponseModel<AutorModel> response = new ResponseModel<AutorModel>();
+            try
+            {
+                var autor = await _autorInterface.BuscarAutorPorIdLivro(idLivro);
+                return Ok(autor);
+            }
+            catch (Exception ex)
+            {
+                response.Mensagem = ex.Message;
+                response.Status = false;
+                return response;
+            }
         }
 
         [HttpPost("CriarAutor")]

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApi8.Models;
 using WebApi8.Dto.Autor;
+using Azure;
 
 namespace WebApi8.Services.Autor
 {
@@ -66,7 +67,7 @@ namespace WebApi8.Services.Autor
 
         public async Task<ResponseModel<List<AutorModel>>> CriarAutor(AutorCriacaoDto autorCriacaoDto)
         {
-            var response = new ResponseModel<List<AutorModel>>();
+            ResponseModel<List<AutorModel>> response = new ResponseModel<List<AutorModel>>();
 
             try
             {
@@ -107,11 +108,6 @@ namespace WebApi8.Services.Autor
                 response.Status = false;
                 return response;
             }
-        }
-
-        Task<ResponseModel<AutorModel>> IAutorInterface.CriarAutor(AutorCriacaoDto autorCriacaoDto)
-        {
-            throw new NotImplementedException();
         }
     }
 }
