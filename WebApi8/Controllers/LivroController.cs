@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi8.Models;
-using WebApi8.Services.Autor;
-using WebApi8.Dto.Autor;
-using Azure;
+using WebApi8.Services.Livro;
+using WebApi8.Dto.Livro;
 
 
 namespace WebApi8.Controllers
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class LivroController : ControllerBase
     {
         private readonly ILivroInterface _livroInterface;
@@ -27,48 +27,38 @@ namespace WebApi8.Controllers
 
         public async Task<ActionResult<ResponseModel<LivroModel>>> BuscarLivroPorId(int idLivro)
         {
-            var livro = await _autorInterface.BuscarLivroPorId(idLivro);
+            var livro = await _livroInterface.BuscarLivroPorId(idLivro);
             return Ok(livro);
         }
 
-        [HttpGet("BuscarLivroPorIdLivro/{idLivro}")]
+        [HttpGet("BuscarLivroPorIdAutor/{idAutor}")]
 
-        public async Task<ActionResult<ResponseModel<LivroModel>>> BuscarLivroPorIdLivro(int idLivro)
+        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> BuscarLivroPorIdAutor(int idAutor)
         {
-            ResponseModel<LivroModel> response = new ResponseModel<LivroModel>();
-            try
-            {
-                var autor = await _autorInterface.BuscarAutorPorIdLivro(idLivro);
-                return Ok(autor);
-            }
-            catch (Exception ex)
-            {
-                response.Mensagem = ex.Message;
-                response.Status = false;
-                return response;
-            }
+            var livros = await _livroInterface.BuscarLivroPorIdAutor(idAutor);
+            return Ok(livros);
         }
 
         [HttpPost("CriarLivro")]
-        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> CriarAutor(AutorCriacaoDto autorCriacaoDto)
+        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> CriarLivro(LivroCriacaoDto livroCriacaoDto)
         {
-            var autores = await _autorInterface.CriarAutor(autorCriacaoDto);
-            return Ok(autores);
+            var livros = await _livroInterface.CriarLivro(livroCriacaoDto);
+            return Ok(livros);
         }
 
         [HttpPut("EditarLivro")]
-        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> EditarAutor(AutorEdicaoDto autorEdicaoDto)
+        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> EditarLivro(LivroEdicaoDto livroEdicaoDto)
         {
-            var autores = await _autorInterface.EditarAutor(autorEdicaoDto);
-            return Ok(autores);
+            var livros = await _livroInterface.EditarLivro(livroEdicaoDto);
+            return Ok(livros);
         }
 
         [HttpDelete("ExcluirLivro")]
 
-        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> ExcluirAutor(int idAutor)
+        public async Task<ActionResult<ResponseModel<List<LivroModel>>>> ExcluirLivro(int idLivro)
         {
-            var autores = await _autorInterface.ExcluirAutor(idAutor);
-            return Ok(autores);
+            var livros = await _livroInterface.ExcluirLivro(idLivro);
+            return Ok(livros);
         }
     }
 }

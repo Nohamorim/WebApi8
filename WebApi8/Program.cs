@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using WebApi8.Models;
 using System.Text.Json.Serialization;
 using WebApi8.Services.Autor;
+using WebApi8.Services.Livro;
+using WebApi8.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,5 +70,3 @@ public class AutorModel
     [JsonIgnore]
     public ICollection<LivroModel> Livros { get; set; } = new List<LivroModel>();
 }
-
-

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using WebApi8.Models;
 using WebApi8.Dto;
 using WebApi8.Dto.Autor;
+using WebApi8.Dto.Livro;
+using Azure;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi8.Dto.Autor
 {

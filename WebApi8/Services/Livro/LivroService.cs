@@ -17,7 +17,7 @@ namespace WebApi8.Services.Livro
             ResponseModel<LivroModel> response = new ResponseModel<LivroModel>();
             try
             {
-                var livro = await _context.Livros
+                var livro = await _context.Livros.Include(a => a.Autor)
                 .FirstOrDefaultAsync(livroBanco => livroBanco.Id == idLivro);
 
                 if(livro == null)
@@ -45,12 +45,12 @@ namespace WebApi8.Services.Livro
             {
                 var livro = await _context.Livros
                 .Include(a => a.Autor)
-                .Where(LivroBanco => LivroBanco.Id == idAutor)
+                .Where(livroBanco => livroBanco.AutorId == idAutor)
                 .ToListAsync();
 
-                if (livro == null)
+                if (!livro.Any())
                 {
-                    response.Mensagem = "Nenhum autor localizado para o livro informado.";
+                    response.Mensagem = "Nenhum livro localizado para este autor.";
                     return response;
                 }
                 
@@ -104,7 +104,7 @@ namespace WebApi8.Services.Livro
             return response;
         }
 
-        public async Task<ResponseModel<List<LivroModel>>> EditarLivro(LivroCriacaoDto livroCriacaoDto)
+        public async Task<ResponseModel<List<LivroModel>>> EditarLivro(LivroEdicaoDto livroEdicaoDto)
         {
             ResponseModel<List<LivroModel>> response = new ResponseModel<List<LivroModel>>();
 
@@ -112,9 +112,9 @@ namespace WebApi8.Services.Livro
             {
                 var livro = await _context.Livros
                 .Include(a => a.Autor)
-                .FirstOrDefaultAsync(livroBanco => livroBanco.Id == livroCriacaoDto.Id);
+                .FirstOrDefaultAsync(livroBanco => livroBanco.Id == livroEdicaoDto.Id);
                 var autor = await _context.Autores
-                .FirstOrDefaultAsync(autorBanco => autorBanco.Id == livroCriacaoDto.Autor.Id);
+                .FirstOrDefaultAsync(autorBanco => autorBanco.Id == livroEdicaoDto.Autor.Id);
 
                 if (autor == null)
                 {
@@ -128,7 +128,7 @@ namespace WebApi8.Services.Livro
                     return response;
                 }
 
-                livro.Titulo = livroCriacaoDto.Titulo;
+                livro.Titulo = livroEdicaoDto.Titulo;
                 livro.Autor = autor;
 
                 _context.Update(livro);
@@ -153,8 +153,9 @@ namespace WebApi8.Services.Livro
 
             try
             {
-                var livro = await _context.Livros
+                var livro = await _context.Livros.Include(a => a.Autor)
                     .FirstOrDefaultAsync(livroBanco => livroBanco.Id == idLivro);
+
                 if (livro == null)
                 {
                     response.Mensagem = "Livro não encontrado!";
@@ -182,7 +183,7 @@ namespace WebApi8.Services.Livro
             ResponseModel<List<LivroModel>> response = new ResponseModel<List<LivroModel>>();
             try
             {
-                var livros = await _context.Livros.ToListAsync();
+                var livros = await _context.Livros.Include(a => a.Autor).ToListAsync();
 
                 response.Dados = livros;
                 response.Mensagem = "Todos os livros foram coletados!";
